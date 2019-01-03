@@ -12,3 +12,6 @@ tmp
 
 db/*.db
 db/schema.rb
+
+lib/model_test.rb
+lib/runner.rb
