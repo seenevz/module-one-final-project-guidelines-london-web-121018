@@ -36,5 +36,5 @@ class GetPokeData
         end
         poke_hash        
     end
-    binding.pry
+    #binding.pry
 end
