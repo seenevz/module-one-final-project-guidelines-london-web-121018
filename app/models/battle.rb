@@ -26,6 +26,7 @@ class Battle < ActiveRecord::Base
     end
 
     private
+    
 
     def draw_poke
         @enem_poke = Pokemon.find((rand * 100).round)
