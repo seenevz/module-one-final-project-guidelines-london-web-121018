@@ -6,20 +6,29 @@ class Battle < ActiveRecord::Base
 
     attr_accessor :trn_poke, :enem_poke
 
-    def attack(def_flag = false)
+    def attack(def_flag: false)
 
         if def_flag == false
-            self.enem_poke.hp -= (self.trn_poke.attack - (self.enem_poke.defense * rand))
-            self.trn_poke.hp -= (self.enem_poke.attack - (self.trn_poke.defense * rand))
+            self.enem_poke.hp -= ((self.trn_poke.attack * self.trn_poke.attack) / (self.enem_poke.attack + self.enem_poke.defense))
+            win?
+            if [true, false].sample 
+                self.trn_poke.hp -= ((self.enem_poke.attack * self.enem_poke.attack) / (self.trn_poke.attack + self.trn_poke.defense))
+                win?
+            else
+                defense(enem_poke)
+                puts "enemy defended!!"
+            end 
         else
-            self.trn_poke.hp -= (self.enem_poke.attack / self.trn_poke.defense)
+            self.trn_poke.hp -= ((self.enem_poke.attack * self.enem_poke.attack) / (self.trn_poke.attack + self.trn_poke.defense))
+            win?
         end
-        win?
+        
     end
 
-    def defense
-        self.trn_poke.defense += (self.trn_poke.defense * rand)
-        self.attack(true)
+    def defense(value = trn_poke)
+        
+        value.defense += (value.defense * rand)
+        self.attack(def_flag: true) unless value == enem_poke
     end
 
     private
@@ -39,14 +48,14 @@ class Battle < ActiveRecord::Base
         
         if hp_trn <= 0 && hp_enem > 0
             puts "lost"
-            false
-        elsif hp_trn > 0 && hp_enem <= 0 
+            self.update(win?: false)
+        elsif hp_trn >= 0 && hp_enem < 0
             puts "win"
-            true
+            self.update(win?: true)
         else
             puts "go again"
         end
-        
+        #binding.pry
     end
 
 end
