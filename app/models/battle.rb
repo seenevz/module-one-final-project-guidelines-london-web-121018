@@ -13,7 +13,10 @@ class Battle < ActiveRecord::Base
 
         if def_flag == false
             self.enem_poke.hp -= ((self.trn_poke.attack * self.trn_poke.attack) / (self.trn_poke.attack + self.enem_poke.defense))
-            won?
+            if won?
+                return
+            end
+
             if [true, false].sample 
                 self.trn_poke.hp -= ((self.enem_poke.attack * self.enem_poke.attack) / (self.enem_poke.attack + self.trn_poke.defense))
                 prompt.say("Enemy chose attack!", color: :red)
