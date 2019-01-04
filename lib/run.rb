@@ -2,7 +2,7 @@ LOGO = File.read("lib/logo.txt")
 CREATED = File.read("lib/created.txt")
 NAMES = File.read("lib/names.txt")
 def splash
-
+    system "clear"
     puts CREATED
     sleep(3)
     puts NAMES
