@@ -36,7 +36,7 @@ class Trainer < ActiveRecord::Base
         if divby == 0
             "your win ratio is: 0"
         else                  
-            "your win ratio is: #{(wins/divby)*100}"
+            "your win ratio is: #{((wins/divby.to_f)*100).round}%"
         end
     end
 
@@ -60,7 +60,7 @@ class Trainer < ActiveRecord::Base
         loss = []
         self.trainer_pokemons.each do |tp|
             tp.battles.each do |b|
-                if !b.win? && nil?
+                if !b.win?
                     loss << b
                 end
             end
@@ -73,7 +73,7 @@ class Trainer < ActiveRecord::Base
     end
 
     def my_record
-        puts "#{self.win_ratio} Wins : #{self.wins_total} Losses : #{self.loss_total}"
+        puts "#{self.win_ratio} Wins : #{self.wins_total} Losses : #{self.loss_total} Total fights : #{self.fight_against.length}"
 
     end
 

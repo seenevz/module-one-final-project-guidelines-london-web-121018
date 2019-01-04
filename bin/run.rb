@@ -20,7 +20,11 @@ while !quit
         elsif main_menu == "exist"
             search_trainer = prompt.select("Select yourself!", trainer_opts, marker: ">>", filter: true)
             if search_trainer != "go back"
-                t1 = Trainer.find_by(name: search_trainer)
+                t1 = Trainer.find(search_trainer)
+                system "clear"
+                t1.my_record
+                puts "\n"
+                sleep(3)
             end
         elsif main_menu == true
             quit = true
@@ -36,25 +40,30 @@ while !quit
     tp1.save
 
     #battle_move = prompt.select("Choose your move!", {"Attack" => "attack", "Defend" => "defend"}, marker: ">>")
-
-    while !t1.trainer_pokemons.last.pokemon
-        select_menu = prompt.select("how we search?", {"Search by name" => "name", "Search by stats" => "stats"}, marker: ">>")
+    
+    while !tp1.pokemon
+        prompt.say("It's time to choose your pokemon! \n", color: :bright_yellow)
+        sleep(2)
+        select_menu = prompt.select("How would you like to search?", {"Search by name" => "name", "Search by stats" => "stats"}, marker: ">>")
         if select_menu == "name"
-            select_pokemon = prompt.select("Choose your pokemon #{user[:name]}!", poke_opts, marker: ">>", filter: true, help: "Type back to get to previous menu")
+            select_pokemon = prompt.select("Choose your pokemon #{t1.name}!", poke_opts, marker: ">>", filter: true, help: "Type back to get to previous menu")
             if select_pokemon != "go back"
                 tp1.pokemon_id = select_pokemon
                 tp1.save
+                
             end
         elsif select_menu == "stats"
             search_param = prompt.select("which stat we select?", ["Hp", "Speed", "Attack", "Defense", "Weight"], marker: ">>")
             param_value = prompt.ask("What is the value?")
             tp Pokemon.find_by_stat(search_param, param_value)
-            select_poke_from_param = prompt.select("Choose your pokemon #{user[:name]}", poke_stats_opt(search_param, param_value))
+            select_poke_from_param = prompt.select("Choose your pokemon #{t1.name}", poke_stats_opt(search_param, param_value))
+            
             if select_poke_from_param != "go back"
                 tp1.pokemon_id = select_poke_from_param
                 tp1.save
             end
         end
+        
     end
 
     btl = Battle.create(trainer_pokemon: tp1)
