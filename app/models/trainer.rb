@@ -33,7 +33,11 @@ class Trainer < ActiveRecord::Base
     def win_ratio
         divby = self.fight_against.length
         wins = wins_total
-        "your win ratio is: #{(wins/divby)*100}"
+        if divby == 0
+            "your win ratio is: 0"
+        else                  
+            "your win ratio is: #{(wins/divby)*100}"
+        end
     end
 
     def wins_total
