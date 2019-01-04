@@ -68,6 +68,11 @@ class Pokemon < ActiveRecord::Base
         selected
     end
 
+    def self.find_by_stat(stat, value)
+        selected = Pokemon.all.where("#{stat} <= ?", value).order("#{stat} DESC").limit(5)
+
+        selected
+    end
     
 
 
